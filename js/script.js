@@ -15,18 +15,13 @@ if (toggleBtn) {
   toggleBtn.addEventListener("click", () => {
     document.body.classList.toggle("dark-mode");
 
-    if (document.body.classList.contains("dark-mode")) {
-      toggleBtn.textContent = "☀️";
-    } else {
-      toggleBtn.textContent = "🌙";
-    }
+    toggleBtn.textContent = document.body.classList.contains("dark-mode") ? "☀️" : "🌙";
   });
 }
 
 // =================== Menu Toggle ===================
 const menuToggle = document.getElementById("menuToggle");
 const navMenu = document.getElementById("navMenu");
-
 if (menuToggle && navMenu) {
   menuToggle.addEventListener("click", () => {
     navMenu.classList.toggle("active");
@@ -41,40 +36,44 @@ if (form) {
   message.style.marginTop = "10px";
   form.appendChild(message);
 
-  form.addEventListener("submit", async function (e) {
+  form.addEventListener("submit", async function(e) {
     e.preventDefault();
 
     const orderData = {
-      name: document.getElementById("name").value,
-      phone: document.getElementById("phone").value,
-      location: document.getElementById("location").value,
+      name: document.getElementById("name").value.trim(),
+      phone: document.getElementById("phone").value.trim(),
+      location: document.getElementById("location").value.trim(),
       product: document.getElementById("product").value,
       quantity: document.getElementById("quantity").value
     };
 
+    // Simple validation
+    if (!orderData.name || !orderData.phone || !orderData.location || !orderData.product || !orderData.quantity) {
+      message.textContent = "Please fill all fields";
+      message.style.color = "red";
+      return;
+    }
+
     try {
-      const response = await fetch("http://127.0.0.1:3000/order", {
+      const response = await fetch("https://daily-pride-tablewater.onrender.com/order", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(orderData)
       });
 
-      console.log("STATUS:", response.status);
-
-      if (!response.ok) throw new Error("Failed");
+      if (!response.ok) throw new Error(`Network error: ${response.status}`);
 
       const data = await response.json();
+      console.log("Order response:", data);
 
-      message.textContent = data.message;
+      message.textContent = "Order sent successfully!";
       message.style.color = "green";
 
-      form.reset();
+      form.reset(); // Clear form fields
 
     } catch (error) {
-      console.error("ERROR:", error);
-      message.textContent = "Error sending order!";
+      console.error("Error sending order:", error);
+      message.textContent = "Error sending order. Try again!";
       message.style.color = "red";
     }
   });

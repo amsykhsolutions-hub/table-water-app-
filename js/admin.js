@@ -1,6 +1,6 @@
 console.log("Admin JS Loaded");
 
-const API = "http://127.0.0.1:3000"; // Your Termux IP
+ const API = "https://daily-pride-tablewater.onrender.com";// Your Termux IP
 
 document.addEventListener("DOMContentLoaded", () => {
   loadOrders();
