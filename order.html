@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Order - MSY Marketing</title>
+
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <header class="navbar">
+    <div class="container nav-container">
+      <h2 class="logo">MSY</h2>
+
+      <nav id="navMenu">
+        <ul class="nav-links">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="products.html">Products</a></li>
+          <li><a href="order.html" class="active">Order</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </nav>
+
+      <div class="nav-actions">
+        <button id="themeToggle" class="btn">🌙</button>
+        <div id="menuToggle" class="menu-toggle">☰</div>
+      </div>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="page-hero">
+    <div class="container">
+      <h1>Place Your Order</h1>
+      <p>Fast and easy ordering for Daily Pride Table Water</p>
+    </div>
+  </section>
+
+  <!-- ORDER FORM -->
+  <section class="order-page">
+    <div class="container">
+
+      <form id="orderForm">
+
+        <div class="form-group">
+          <label>Full Name</label>
+          <input type="text" id="name" required>
+        </div>
+
+        <div class="form-group">
+          <label>Phone Number</label>
+          <input type="tel" id="phone" required>
+        </div>
+
+        <div class="form-group">
+          <label>Delivery Location</label>
+          <input type="text" id="location" required>
+        </div>
+
+        <div class="form-group">
+          <label>Product</label>
+          <select id="product" required>
+            <option value="">Select Product</option>
+            <option value="Daily Pride Table Water">Daily Pride Table Water</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Quantity (Bags)</label>
+          <input type="number" id="quantity" required>
+        </div>
+
+        <button type="submit" class="btn">Submit Order</button>
+
+      </form>
+
+    </div>
+  </section>
+
+  <!-- WHATSAPP QUICK ORDER -->
+  <section class="cta">
+    <div class="container">
+      <h2>Prefer WhatsApp?</h2>
+      <a href="08062061237" id="whatsappBtn" class="btn">Order via WhatsApp</a>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>© 2026 MSY Marketing and Enterprise Ltd.</p>
+  </footer>
+
+  <script src="js/script.js"></script>
+</body>
+</html>

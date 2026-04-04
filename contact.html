@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact - MSY Marketing</title>
+
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <header class="navbar">
+    <div class="container nav-container">
+      <h2 class="logo">MSY</h2>
+
+      <nav id="navMenu">
+        <ul class="nav-links">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="products.html">Products</a></li>
+          <li><a href="order.html">Order</a></li>
+          <li><a href="contact.html" class="active">Contact</a></li>
+        </ul>
+      </nav>
+
+      <div class="nav-actions">
+        <button id="themeToggle" class="btn">🌙</button>
+        <div id="menuToggle" class="menu-toggle">☰</div>
+      </div>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="page-hero">
+    <div class="container">
+      <h1>Contact Us</h1>
+      <p>Get in touch with MSY Marketing and Enterprise Ltd.</p>
+    </div>
+  </section>
+
+  <!-- CONTACT FORM + INFO -->
+  <section class="contact-page">
+    <div class="container contact-grid">
+
+      <!-- CONTACT FORM -->
+      <div class="contact-form">
+        <form id="contactForm">
+          <div class="form-group">
+            <label>Full Name</label>
+            <input type="text" id="cname" required>
+          </div>
+
+          <div class="form-group">
+            <label>Email</label>
+            <input type="email" id="cemail" required>
+          </div>
+
+          <div class="form-group">
+            <label>Message</label>
+            <textarea id="cmessage" rows="5" required></textarea>
+          </div>
+
+          <button type="submit" class="btn">Send Message</button>
+        </form>
+      </div>
+
+      <!-- CONTACT INFO + MAP -->
+      <div class="contact-info">
+        <h3>Our Information</h3>
+        <p><strong>Phone:</strong> 08062061237</p>
+        <p><strong>WhatsApp:</strong> 08062061237</p>
+        <p><strong>Location:</strong> Dawakin Kudu LGA, Kano State, Nigeria</p>
+
+        <div class="map">
+          <iframe
+            src="https://www.google.com/maps?q=Amana+city+Opp+WHO+Office++Dawakin+Kudu+Kano+Nigeria&output=embed"
+            width="100%"
+            height="250"
+            style="border:0;"
+            allowfullscreen=""
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade">
+          </iframe>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>© 2026 MSY Marketing and Enterprise Ltd.</p>
+  </footer>
+
+  <script src="js/script.js"></script>
+</body>
+</html>
