@@ -5,7 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MSY Admin Dashboard</title>
 <link rel="stylesheet" href="css/style.css">
-</head>
+</head> <script>
+if (!localStorage.getItem("isLoggedIn")) {
+  window.location.href = "login.html";
+}
+</script>
 <body>
 
 <h1>MSY Admin Dashboard</h1>
@@ -28,7 +32,14 @@
     <!-- Orders will appear here -->
   </tbody>
 </table>
+<button onclick="logout()">Logout</button>
 
+<script>
+function logout() {
+  localStorage.removeItem("isLoggedIn");
+  window.location.href = "login.html";
+}
+</script>
 <script src="admin.js"></script>
 </body>
 </html>
