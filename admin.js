@@ -25,14 +25,18 @@ async function loadOrders() {
   });
 }
 
+const BASE_URL = "https://daily-pride-tablewater.onrender.com";
+
 async function deleteOrder(index) {
-  await fetch(`${BASE_URL}/order/${index}`, { method: "DELETE" });
-  loadOrders();
+  await fetch(`${BASE_URL}/delete-order/${index}`, {
+    method: "POST"
+  });
+  location.reload();
 }
 
 async function markDelivered(index) {
-  await fetch(`${BASE_URL}/order/${index}`, { method: "PUT" });
-  loadOrders();
+  await fetch(`${BASE_URL}/deliver-order/${index}`, {
+    method: "POST"
+  });
+  location.reload();
 }
-
-loadOrders();
