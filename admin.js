@@ -25,8 +25,6 @@ async function loadOrders() {
   });
 }
 
-const BASE_URL = "https://daily-pride-tablewater.onrender.com";
-
 async function deleteOrder(index) {
   await fetch(`${BASE_URL}/delete-order/${index}`, {
     method: "POST"
@@ -40,4 +38,5 @@ async function markDelivered(index) {
   });
   location.reload();
 }
+
 loadOrders();
