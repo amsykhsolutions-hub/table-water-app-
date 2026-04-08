@@ -40,3 +40,4 @@ async function markDelivered(index) {
   });
   location.reload();
 }
+loadOrders();
