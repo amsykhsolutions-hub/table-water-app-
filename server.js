@@ -9,8 +9,8 @@ const PORT = process.env.PORT || 3000;
 app.use(cors());
 app.use(express.json());
 
-// 🔥 USE RELATIVE PATH
-app.use(express.static(__dirname));
+// 🔥 USE RELATIVE PATH//
+app.use(express.static("public"));
 
 app.get('/orders', (req, res) => {
   const dataPath = path.join(__dirname, 'data', 'orders.json');

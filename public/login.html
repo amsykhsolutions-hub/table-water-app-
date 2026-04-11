@@ -2,7 +2,7 @@
 <html>
 <head>
   <title>Admin Login</title>
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="/css/style.css">
 </head>
 
 <body>
@@ -26,7 +26,7 @@ document.getElementById("loginForm").addEventListener("submit", function(e) {
   const username = document.getElementById("username").value;
   const password = document.getElementById("password").value;
 
-  if (username === "amsykh" && password === "0806206") {
+  if (username === "MSY CEO" && password === "0806206") {
     localStorage.setItem("isLoggedIn", "true");
     window.location.href = "admin.html";
   } else {
