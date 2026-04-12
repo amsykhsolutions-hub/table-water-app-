@@ -1,3 +1,4 @@
+alert("ADMIN JS IS WORKING");
 const BASE_URL = "https://daily-pride-tablewater.onrender.com";
 
 // Load all orders
