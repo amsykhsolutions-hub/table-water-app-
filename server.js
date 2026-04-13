@@ -2,6 +2,7 @@ const express = require("express");
 const fs = require("fs");
 const cors = require("cors");
 const path = require("path");
+const nodemailer = require("nodemailer");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -93,7 +94,30 @@ app.post("/deliver-order/:index", (req, res) => {
   }
 });
 
+app.post('/contact', async (req, res) => {
+  const { name, phone, message } = req.body;
 
+  try {
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: "abdullahimuhdsiyudi620@gmail.com",
+        pass: "hhdq perb fyvw ifyv"      }
+    });
+
+    await transporter.sendMail({
+      from: "Website Contact",
+      to: "YOUR_EMAIL@gmail.com",
+      subject: "New Contact Message",
+      text: `Name: ${name}\nPhone: ${phone}\nMessage: ${message}`
+    });
+
+    res.json({ success: true });
+
+  } catch (err) {
+    res.status(500).json({ success: false });
+  }
+});
 // START SERVER
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
