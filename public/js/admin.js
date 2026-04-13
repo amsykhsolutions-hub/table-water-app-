@@ -20,8 +20,8 @@ async function loadOrders() {
 
       row.innerHTML = `
         <td>${order.name || ""}</td>
-        <td>${order.phone || ""}</td>
-        <td>${order.address || ""}</td>
+        <td>${order.phone || ""}</td>€
+        <td>${order.location || order.address || ""}</td>
         <td>${order.quantity || ""}</td>
         <td id="status-${index}">${order.status || "Pending"}</td>
         <td>
