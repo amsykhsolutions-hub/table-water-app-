@@ -1,4 +1,3 @@
-alert("ADMIN JS IS WORKING");
 const BASE_URL = "https://daily-pride-tablewater.onrender.com";
 
 // Load all orders
@@ -29,13 +28,12 @@ async function loadOrders() {
     });
 
   } catch (err) {
-    console.error(err);
     alert("Failed to load orders");
   }
 }
 
 
-// Delete order (NO REFRESH)
+// Delete order
 async function deleteOrder(index, btn) {
   if (!confirm("Are you sure you want to delete this order?")) return;
 
@@ -49,12 +47,10 @@ async function deleteOrder(index, btn) {
 
     if (!res.ok) throw new Error();
 
-    // Remove row instantly
     btn.closest("tr").remove();
 
   } catch (err) {
-    console.error(err);
-    alert("Failed to delete order");
+    alert("Delete failed");
 
     btn.innerText = "Delete";
     btn.disabled = false;
@@ -62,7 +58,7 @@ async function deleteOrder(index, btn) {
 }
 
 
-// Mark as delivered (NO REFRESH)
+// Mark as delivered
 async function markDelivered(index, btn) {
   btn.innerText = "Processing...";
   btn.disabled = true;
@@ -74,14 +70,12 @@ async function markDelivered(index, btn) {
 
     if (!res.ok) throw new Error();
 
-    // Update status instantly
     document.getElementById(`status-${index}`).innerText = "Delivered";
 
     btn.innerText = "Delivered";
 
   } catch (err) {
-    console.error(err);
-    alert("Failed to update status");
+    alert("Update failed");
 
     btn.innerText = "Deliver";
     btn.disabled = false;
@@ -89,5 +83,5 @@ async function markDelivered(index, btn) {
 }
 
 
-// Initial load
-loadOrders();
+// Run on page load
+window.onload = loadOrders;
