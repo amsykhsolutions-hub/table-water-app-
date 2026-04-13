@@ -1,73 +1,73 @@
-console.log("Admin JS Loaded");
+const BASE_URL = "https://daily-pride-tablewater.onrender.com";
 
- const API = "https://daily-pride-tablewater.onrender.com";// Your Termux IP
-
-document.addEventListener("DOMContentLoaded", () => {
-  loadOrders();
-});
-
-// Load orders from backend
 async function loadOrders() {
   try {
-    console.log("Fetching orders from:", API);
-    const response = await fetch(`${API}/orders`);
-    console.log("Response status:", response.status);
+    const res = await fetch(`${BASE_URL}/orders`);
+    const orders = await res.json();
 
-    if (!response.ok) throw new Error("Failed to fetch orders");
+    const table = document.getElementById("ordersTable");
 
-    const orders = await response.json();
-    console.log("Orders from backend:", orders);
-
-    const tbody = document.getElementById("ordersBody");
-    if (!tbody) {
-      console.error("Table body not found!");
+    // SAFETY CHECK
+    if (!table) {
+      alert("Table not found");
       return;
     }
-    tbody.innerHTML = "";
+
+    table.innerHTML = "";
 
     orders.forEach((order, index) => {
-      // Auto fill date & status if missing
-      const date = order.date || new Date().toLocaleString();
-      const status = order.status || "Pending";
+      const row = document.createElement("tr");
 
-      const tr = document.createElement("tr");
-      tr.innerHTML = `
-        <td>${index + 1}</td>
+      row.innerHTML = `
         <td>${order.name || ""}</td>
         <td>${order.phone || ""}</td>
-        <td>${order.location || ""}</td>
-        <td>${order.product || ""}</td>
+        <td>${order.address || ""}</td>
         <td>${order.quantity || ""}</td>
-        <td>${date}</td>
-        <td>${status}</td>
+        <td id="status-${index}">${order.status || "Pending"}</td>
         <td>
-          <button onclick="updateStatus(${index}, 'Completed')">Mark Completed</button>
+          <button onclick="markDelivered(${index}, this)">Deliver</button>
+          <button onclick="deleteOrder(${index}, this)">Delete</button>
         </td>
       `;
-      tbody.appendChild(tr);
+
+      table.appendChild(row);
     });
 
-  } catch (error) {
-    console.error("Error loading orders:", error);
+  } catch (err) {
+    alert("Error loading orders");
   }
 }
 
-// Update order status
-async function updateStatus(index, status) {
+
+// DELETE
+async function deleteOrder(index, btn) {
   try {
-    const response = await fetch(`${API}/orders/update`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ index, status })
+    await fetch(`${BASE_URL}/delete-order/${index}`, {
+      method: "POST"
     });
 
-    if (!response.ok) throw new Error("Update failed");
-
-    const data = await response.json();
-    console.log("Status update response:", data);
-
-    loadOrders(); // refresh table
-  } catch (error) {
-    console.error("Error updating status:", error);
+    btn.closest("tr").remove();
+  } catch (err) {
+    alert("Delete failed");
   }
 }
+
+
+// DELIVER
+async function markDelivered(index, btn) {
+  try {
+    await fetch(`${BASE_URL}/deliver-order/${index}`, {
+      method: "POST"
+    });
+
+    const status = document.getElementById(`status-${index}`);
+    if (status) status.innerText = "Delivered";
+
+  } catch (err) {
+    alert("Update failed");
+  }
+}
+
+
+// FORCE RUN (NO RELY ON EVENTS)
+setTimeout(loadOrders, 500);
