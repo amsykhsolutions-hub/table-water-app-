@@ -78,3 +78,47 @@ if (form) {
     }
   });
 }
+const contactForm = document.getElementById("contactForm");
+
+if (contactForm) {
+  const msg = document.createElement("p");
+  msg.style.marginTop = "10px";
+  contactForm.appendChild(msg);
+
+  contactForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const data = {
+      name: document.getElementById("cname")?.value,
+      email: document.getElementById("cemail")?.value,
+      message: document.getElementById("cmessage")?.value
+    };
+
+    if (!data.name || !data.email || !data.message) {
+      msg.textContent = "Please fill all fields";
+      msg.style.color = "red";
+      return;
+    }
+
+    try {
+      const res = await fetch("https://daily-pride-tablewater.onrender.com/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(data)
+      });
+
+      if (!res.ok) throw new Error("Network error");
+
+      msg.textContent = "Message sent successfully!";
+      msg.style.color = "green";
+
+      contactForm.reset();
+
+    } catch (err) {
+      msg.textContent = "Failed to send message";
+      msg.style.color = "red";
+    }
+  });
+}
