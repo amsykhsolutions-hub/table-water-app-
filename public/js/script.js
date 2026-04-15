@@ -88,11 +88,15 @@ if (contactForm) {
   contactForm.addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    const data = {
-      name: document.getElementById("cname").value,
-      email: document.getElementById("cemail").value,
-      message: document.getElementById("cmessage").value
-    };
+    const nameInput = document.getElementById("cname");
+const emailInput = document.getElementById("cemail");
+const messageInput = document.getElementById("cmessage");
+
+const data = {
+  name: nameInput ? nameInput.value : "",
+  email: emailInput ? emailInput.value : "",
+  message: messageInput ? messageInput.value : ""
+};
 
     if (!data.name || !data.email || !data.message) {
       msg.textContent = "Please fill all fields";
