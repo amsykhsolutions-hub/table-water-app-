@@ -78,55 +78,24 @@ if (form) {
     }
   });
 }
-const contactForm = document.getElementById("contactForm");
+const res = await fetch("/contact", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify({
+    name: document.getElementById("cname").value,
+    email: document.getElementById("cemail").value,
+    message: document.getElementById("cmessage").value
+  })
+});
 
-if (contactForm) {
-  const msg = document.createElement("p");
-  msg.style.marginTop = "10px";
-  contactForm.appendChild(msg);
+const result = await res.json();
 
-  contactForm.addEventListener("submit", async (e) => {
-    e.preventDefault();
-
-    const nameInput = document.getElementById("cname");
-const emailInput = document.getElementById("cemail");
-const messageInput = document.getElementById("cmessage");
-
-const data = {
-  name: nameInput ? nameInput.value : "",
-  email: emailInput ? emailInput.value : "",
-  message: messageInput ? messageInput.value : ""
-};
-
-    if (!data.name || !data.email || !data.message) {
-      msg.textContent = "Please fill all fields";
-      msg.style.color = "red";
-      return;
-    }
-
-    try {
-      const res = await fetch("/contact", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(data)
-      });
-
-      const result = await res.json();
-
-      if (result.success) {
-        msg.textContent = "Message sent successfully!";
-        msg.style.color = "green";
-        contactForm.reset();
-      } else {
-        msg.textContent = "Failed to send message";
-        msg.style.color = "red";
-      }
-
-    } catch (err) {
-      msg.textContent = "Network error";
-      msg.style.color = "red";
-    }
-  });
+if (result.success) {
+  msg.textContent = "Message sent successfully!";
+  msg.style.color = "green";
+} else {
+  msg.textContent = "Failed to send message";
+  msg.style.color = "red";
 }
