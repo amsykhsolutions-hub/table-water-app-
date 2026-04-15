@@ -83,26 +83,30 @@ app.post("/contact", async (req, res) => {
   const { name, email, message } = req.body;
 
   try {
-    const transporter = nodemailer.createTransport({
-      service: "gmail",
+    const transporter = require("nodemailer").createTransport({
+      host: "smtp.gmail.com",
+      port: 587,
+      secure: false,
       auth: {
-        user: "abdullahimuhammadiyudi620@gmail.com",
+        user: "abdullahimuhdsiyudi620@gmail.com",
         pass: "hhdqperbfyvwifyv"
       }
     });
 
     await transporter.sendMail({
-  from: `"MSY Website" <abdullahimuhdsiyudi620@gmail.com>`,
-  to: "abdullahimuhdsiyudi620@gmail.com",
-  subject: "New Contact Message",
-  text: `Name: ${name}\nEmail: ${email}\nMessage: ${message}`
-});
+      from: `"MSY Website" <abdullahimuhdsiyudi620@gmail.com>`,
+      to: "abdullahimuhdsiyudi620@gmail.com",
+      subject: "New Contact Message",
+      text: `Name: ${name}\nEmail: ${email}\nMessage: ${message}`
+    });
+
     res.json({ success: true });
 
-  catch (err) {
-  console.log(err);
-  res.status(500).json({ success: false });
-}
+  } catch (err) {
+    console.log("EMAIL ERROR:", err);
+    res.status(500).json({ success: false });
+  }
+});
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
