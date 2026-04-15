@@ -92,19 +92,17 @@ app.post("/contact", async (req, res) => {
     });
 
     await transporter.sendMail({
-      from: "Website Contact",
-      to: "YOUR_EMAIL@gmail.com",
-      subject: "New Contact Message",
-      text: `Name: ${name}\nEmail: ${email}\nMessage: ${message}`
-    });
-
+  from: `"MSY Website" <abdullahimuhdsiyudi620@gmail.com>`,
+  to: "abdullahimuhdsiyudi620@gmail.com",
+  subject: "New Contact Message",
+  text: `Name: ${name}\nEmail: ${email}\nMessage: ${message}`
+});
     res.json({ success: true });
 
-  } catch {
-    res.status(500).json({ success: false });
-  }
-});
-
+  catch (err) {
+  console.log(err);
+  res.status(500).json({ success: false });
+}
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
