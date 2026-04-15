@@ -89,9 +89,9 @@ if (contactForm) {
     e.preventDefault();
 
     const data = {
-      name: document.getElementById("cname")?.value,
-      email: document.getElementById("cemail")?.value,
-      message: document.getElementById("cmessage")?.value
+      name: document.getElementById("cname").value,
+      email: document.getElementById("cemail").value,
+      message: document.getElementById("cmessage").value
     };
 
     if (!data.name || !data.email || !data.message) {
@@ -101,7 +101,7 @@ if (contactForm) {
     }
 
     try {
-      const res = await fetch("https://daily-pride-tablewater.onrender.com/contact", {
+      const res = await fetch("/contact", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -109,19 +109,19 @@ if (contactForm) {
         body: JSON.stringify(data)
       });
 
-      const data = await res.json();
+      const result = await res.json();
 
-if (data.success) {
-  msg.textContent = "Message sent successfully!";
-  msg.style.color = "green";
-  contactForm.reset();
-} else {
-  msg.textContent = "Failed to send message";
-  msg.style.color = "red";
-}
+      if (result.success) {
+        msg.textContent = "Message sent successfully!";
+        msg.style.color = "green";
+        contactForm.reset();
+      } else {
+        msg.textContent = "Failed to send message";
+        msg.style.color = "red";
+      }
 
-       catch (err) {
-      msg.textContent = "Failed to send message";
+    } catch (err) {
+      msg.textContent = "Network error";
       msg.style.color = "red";
     }
   });
