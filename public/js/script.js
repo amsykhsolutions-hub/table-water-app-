@@ -109,14 +109,18 @@ if (contactForm) {
         body: JSON.stringify(data)
       });
 
-      if (!res.ok) throw new Error("Network error");
+      const data = await res.json();
 
-      msg.textContent = "Message sent successfully!";
-      msg.style.color = "green";
+if (data.success) {
+  msg.textContent = "Message sent successfully!";
+  msg.style.color = "green";
+  contactForm.reset();
+} else {
+  msg.textContent = "Failed to send message";
+  msg.style.color = "red";
+}
 
-      contactForm.reset();
-
-    } catch (err) {
+       catch (err) {
       msg.textContent = "Failed to send message";
       msg.style.color = "red";
     }
