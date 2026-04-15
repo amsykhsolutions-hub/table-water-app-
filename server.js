@@ -87,7 +87,7 @@ app.post("/contact", async (req, res) => {
       service: "gmail",
       auth: {
         user: "abdullahimuhammadiyudi620@gmail.com",
-        pass: "hhdq perb fyvw ifyv"
+        pass: "hhdqperbfyvwifyv"
       }
     });
 
