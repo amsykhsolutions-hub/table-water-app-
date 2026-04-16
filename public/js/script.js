@@ -78,27 +78,6 @@ if (form) {
     }
   });
 }
-const res = await fetch("/contact", {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json"
-  },
-  body: JSON.stringify({
-    name: document.getElementById("cname").value,
-    email: document.getElementById("cemail").value,
-    message: document.getElementById("cmessage").value
-  })
-});
-
-const result = await res.json();
-
-if (result.success) {
-  msg.textContent = "Message sent successfully!";
-  msg.style.color = "green";
-} else {
-  msg.textContent = "Failed to send message";
-  msg.style.color = "red";
-}
 const contactForm = document.getElementById("contactForm");
 
 if (contactForm) {
