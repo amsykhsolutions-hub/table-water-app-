@@ -28,6 +28,7 @@ if (menuToggle && navMenu) {
   });
 }
 
+
 // =================== Order Form ===================
 const form = document.getElementById("orderForm");
 
@@ -42,13 +43,12 @@ if (form) {
     const orderData = {
       name: document.getElementById("name").value.trim(),
       phone: document.getElementById("phone").value.trim(),
+      address: document.getElementById("address").value.trim(),
       location: document.getElementById("location").value.trim(),
-      product: document.getElementById("product").value,
-      quantity: document.getElementById("quantity").value
+      quantity: Number(document.getElementById("quantity").value)
     };
 
-    // Simple validation
-    if (!orderData.name || !orderData.phone || !orderData.location || !orderData.product || !orderData.quantity) {
+    if (!orderData.name || !orderData.phone || !orderData.address || !orderData.location || !orderData.quantity) {
       message.textContent = "Please fill all fields";
       message.style.color = "red";
       return;
@@ -57,19 +57,21 @@ if (form) {
     try {
       const response = await fetch("https://daily-pride-tablewater.onrender.com/order", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json"
+        },
         body: JSON.stringify(orderData)
       });
 
-      if (!response.ok) throw new Error(`Network error: ${response.status}`);
-
       const data = await response.json();
-      console.log("Order response:", data);
 
-      message.textContent = "Order sent successfully!";
+      if (!response.ok) {
+        throw new Error(data.error || "Failed");
+      }
+
+      message.textContent = "Order sent successfully! 🎉";
       message.style.color = "green";
-
-      form.reset(); // Clear form fields
+      form.reset();
 
     } catch (error) {
       console.error("Error sending order:", error);
@@ -77,8 +79,10 @@ if (form) {
       message.style.color = "red";
     }
   });
-}
+
+// =================== Contact Form ===================
 const contactForm = document.getElementById("contactForm");
+
 
 if (contactForm) {
   const msg = document.createElement("p");
