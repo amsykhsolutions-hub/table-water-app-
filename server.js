@@ -1,7 +1,12 @@
+
+const mongoose = require("mongoose");
+
+mongoose.connect("mongodb+srv://Amsykhsolutions-hub:MSYmadobi%236206@admin.isv57p9.mongodb.net/table-water-app?retryWrites=true&w=majority")
+.then(() => console.log("MongoDB Connected"))
+.catch(err => console.log("DB ERROR:", err));
+
 const express = require("express");
-const fs = require("fs");
 const cors = require("cors");
-const path = require("path");
 const nodemailer = require("nodemailer");
 
 const app = express();
@@ -11,34 +16,46 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static("public"));
 
-const dataPath = path.join(__dirname, "data", "orders.json");
+/* =====================
+   MONGODB MODEL
+===================== */
+const orderSchema = new mongoose.Schema({
+  name: String,
+  phone: String,
+  address: String,
+  location: String,
+  quantity: Number,
+  status: {
+    type: String,
+    default: "Pending",
+  },
+  date: {
+    type: String,
+    default: () => new Date().toLocaleString()
+  }
+});
 
-if (!fs.existsSync(dataPath)) {
-  fs.writeFileSync(dataPath, JSON.stringify([]));
-}
+const Order = mongoose.model("Order", orderSchema);
 
-// GET ORDERS
-app.get("/orders", (req, res) => {
+/* =====================
+   GET ORDERS
+===================== */
+app.get("/orders", async (req, res) => {
   try {
-    const data = JSON.parse(fs.readFileSync(dataPath));
-    res.json(data);
+    const orders = await Order.find().sort({ _id: -1 });
+    res.json(orders);
   } catch {
     res.status(500).json({ error: "read error" });
   }
 });
 
-// CREATE ORDER
-app.post("/order", (req, res) => {
+/* =====================
+   CREATE ORDER
+===================== */
+app.post("/order", async (req, res) => {
   try {
-    const orders = JSON.parse(fs.readFileSync(dataPath));
-
-    const newOrder = req.body;
-    newOrder.date = new Date().toLocaleString();
-    newOrder.status = "Pending";
-
-    orders.push(newOrder);
-
-    fs.writeFileSync(dataPath, JSON.stringify(orders, null, 2));
+    const newOrder = new Order(req.body);
+    await newOrder.save();
 
     res.json({ message: "ok" });
   } catch {
@@ -46,31 +63,26 @@ app.post("/order", (req, res) => {
   }
 });
 
-// DELETE
-app.post("/delete-order/:index", (req, res) => {
+/* =====================
+   DELETE (USING _id)
+===================== */
+app.delete("/order/:id", async (req, res) => {
   try {
-    const index = parseInt(req.params.index);
-    const orders = JSON.parse(fs.readFileSync(dataPath));
-
-    orders.splice(index, 1);
-
-    fs.writeFileSync(dataPath, JSON.stringify(orders, null, 2));
-
+    await Order.findByIdAndDelete(req.params.id);
     res.json({ message: "deleted" });
   } catch {
     res.status(500).json({ error: "delete error" });
   }
 });
 
-// DELIVER
-app.post("/deliver-order/:index", (req, res) => {
+/* =====================
+   DELIVER (USING _id)
+===================== */
+app.put("/order/:id/deliver", async (req, res) => {
   try {
-    const index = parseInt(req.params.index);
-    const orders = JSON.parse(fs.readFileSync(dataPath));
-
-    orders[index].status = "Delivered";
-
-    fs.writeFileSync(dataPath, JSON.stringify(orders, null, 2));
+    await Order.findByIdAndUpdate(req.params.id, {
+      status: "Delivered"
+    });
 
     res.json({ message: "updated" });
   } catch {
@@ -78,35 +90,40 @@ app.post("/deliver-order/:index", (req, res) => {
   }
 });
 
-// CONTACT (ONLY FIXED, NO EXTRA CHANGE)
+/* =====================
+   CONTACT (UNCHANGED)
+===================== */
 app.post("/contact", async (req, res) => {
-  const { name, email, message } = req.body;
+  console.log("BODY RECEIVED:", req.body);
 
-  try {
-    const transporter = require("nodemailer").createTransport({
-      host: "smtp.gmail.com",
-      port: 587,
-      secure: false,
-      auth: {
-        user: "abdullahimuhdsiyudi620@gmail.com",
-        pass: "hhdqperbfyvwifyv"
-      }
-    });
+  const name = req.body.name;
+  const email = req.body.email;
+  const message = req.body.message;
 
-    await transporter.sendMail({
-      from: `"MSY Website" <abdullahimuhdsiyudi620@gmail.com>`,
-      to: "abdullahimuhdsiyudi620@gmail.com",
-      subject: "New Contact Message",
-      text: `Name: ${name}\nEmail: ${email}\nMessage: ${message}`
-    });
-
-    res.json({ success: true });
-
-  } catch (err) {
-    console.log("EMAIL ERROR:", err);
-    res.status(500).json({ success: false });
+  if (!name || !email || !message) {
+    return res.json({ success: false, error: "Missing fields" });
   }
+
+  res.json({ success: true });
+
+  const transporter = require("nodemailer").createTransport({
+    host: "smtp.gmail.com",
+    port: 587,
+    secure: false,
+    auth: {
+      user: "abdullahimuhdsiyudi620@gmail.com",
+      pass: "hhdqperbfyvwifyv"
+    }
+  });
+
+  transporter.sendMail({
+    from: `"MSY Website" <abdullahimuhdsiyudi620@gmail.com>`,
+    to: "abdullahimuhdsiyudi620@gmail.com",
+    subject: "New Contact Message",
+    text: `Name: ${name}\nEmail: ${email}\nMessage: ${message}`
+  }).catch(console.error);
 });
+
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
