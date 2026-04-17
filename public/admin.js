@@ -7,7 +7,6 @@ async function loadOrders() {
 
     const table = document.getElementById("ordersTable");
 
-    // SAFETY CHECK
     if (!table) {
       alert("Table not found");
       return;
@@ -15,7 +14,7 @@ async function loadOrders() {
 
     table.innerHTML = "";
 
-    orders.forEach((order, index) => {
+    orders.forEach((order) => {
       const row = document.createElement("tr");
 
       row.innerHTML = `
@@ -23,10 +22,10 @@ async function loadOrders() {
         <td>${order.phone || ""}</td>
         <td>${order.location || order.address || ""}</td>
         <td>${order.quantity || ""}</td>
-        <td id="status-${index}">${order.status || "Pending"}</td>
+        <td>${order.status || "Pending"}</td>
         <td>
-          <button onclick="markDelivered(${index}, this)">Deliver</button>
-          <button onclick="deleteOrder(${index}, this)">Delete</button>
+          <button onclick="markDelivered('${order._id}', this)">Deliver</button>
+          <button onclick="deleteOrder('${order._id}', this)">Delete</button>
         </td>
       `;
 
@@ -35,39 +34,44 @@ async function loadOrders() {
 
   } catch (err) {
     alert("Error loading orders");
+    console.error(err);
   }
 }
 
 
-// DELETE
-async function deleteOrder(index, btn) {
+// DELETE (USE _id)
+async function deleteOrder(id, btn) {
   try {
-    await fetch(`${BASE_URL}/delete-order/${index}`, {
-      method: "POST"
+    await fetch(`${BASE_URL}/order/${id}`, {
+      method: "DELETE"
     });
 
     btn.closest("tr").remove();
   } catch (err) {
     alert("Delete failed");
+    console.error(err);
   }
 }
 
 
-// DELIVER
-async function markDelivered(index, btn) {
+// DELIVER (USE _id)
+async function markDelivered(id, btn) {
   try {
-    await fetch(`${BASE_URL}/deliver-order/${index}`, {
-      method: "POST"
+    await fetch(`${BASE_URL}/order/${id}/deliver`, {
+      method: "PUT"
     });
 
-    const status = document.getElementById(`status-${index}`);
-    if (status) status.innerText = "Delivered";
+    const row = btn.closest("tr");
+    if (row) {
+      row.children[4].innerText = "Delivered";
+    }
 
   } catch (err) {
     alert("Update failed");
+    console.error(err);
   }
 }
 
 
-// FORCE RUN (NO RELY ON EVENTS)
+// LOAD
 setTimeout(loadOrders, 500);
