@@ -54,11 +54,19 @@ app.get("/orders", async (req, res) => {
 ===================== */
 app.post("/order", async (req, res) => {
   try {
-    const newOrder = new Order(req.body);
+    const newOrder = new Order({
+      name: req.body.name,
+      phone: req.body.phone,
+      address: req.body.address || "N/A",
+      location: req.body.location,
+      quantity: req.body.quantity
+    });
+
     await newOrder.save();
 
     res.json({ message: "ok" });
-  } catch {
+  } catch (err) {
+    console.log("ORDER ERROR:", err); // 👈 helps debugging even without console
     res.status(500).json({ error: "save error" });
   }
 });
