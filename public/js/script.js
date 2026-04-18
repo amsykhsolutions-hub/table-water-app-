@@ -14,7 +14,6 @@ const toggleBtn = document.getElementById("themeToggle");
 if (toggleBtn) {
   toggleBtn.addEventListener("click", () => {
     document.body.classList.toggle("dark-mode");
-
     toggleBtn.textContent = document.body.classList.contains("dark-mode") ? "☀️" : "🌙";
   });
 }
@@ -28,26 +27,26 @@ if (menuToggle && navMenu) {
   });
 }
 
-
 // =================== Order Form ===================
-const form = document.getElementById("orderForm");
+const orderForm = document.getElementById("orderForm");
 
-if (form) {
+if (orderForm) {
   const message = document.createElement("p");
   message.style.marginTop = "10px";
-  form.appendChild(message);
+  orderForm.appendChild(message);
 
-  form.addEventListener("submit", async function(e) {
+  orderForm.addEventListener("submit", async function(e) {
     e.preventDefault();
 
     const orderData = {
       name: document.getElementById("name").value.trim(),
       phone: document.getElementById("phone").value.trim(),
-      address: document.getElementById("address").value.trim(),
+      address: document.getElementById("address").value.trim(), // REQUIRED
       location: document.getElementById("location").value.trim(),
       quantity: Number(document.getElementById("quantity").value)
     };
 
+    // Validation
     if (!orderData.name || !orderData.phone || !orderData.address || !orderData.location || !orderData.quantity) {
       message.textContent = "Please fill all fields";
       message.style.color = "red";
@@ -71,7 +70,7 @@ if (form) {
 
       message.textContent = "Order sent successfully! 🎉";
       message.style.color = "green";
-      form.reset();
+      orderForm.reset();
 
     } catch (error) {
       console.error("Error sending order:", error);
@@ -79,10 +78,10 @@ if (form) {
       message.style.color = "red";
     }
   });
+}
 
 // =================== Contact Form ===================
 const contactForm = document.getElementById("contactForm");
-
 
 if (contactForm) {
   const msg = document.createElement("p");
@@ -93,7 +92,7 @@ if (contactForm) {
     e.preventDefault();
 
     try {
-      const res = await fetch("/contact", {
+      const res = await fetch("https://daily-pride-tablewater.onrender.com/contact", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -119,6 +118,13 @@ if (contactForm) {
     } catch (err) {
       msg.textContent = "Network error";
       msg.style.color = "red";
+      console.error(err);
     }
   });
 }
+
+
+
+
+
+
